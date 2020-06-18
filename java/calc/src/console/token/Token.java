@@ -1,28 +1,22 @@
 package console.token;
 
+import console.token.state.TokenState;
+
+import java.util.regex.Matcher;
+
 public class Token {
-    private final String value;
-    private final TokenType tokenType;
+    private String value;
+    private int startIndex;
+    private TokenState state;
 
-    public Token(TokenLocator locator) {
-        this.value = locator.getMatchValue();
-        this.tokenType = locator.getTokenType();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public TokenType getType() {
-        return tokenType;
+    public Token(Matcher matcher, TokenState state) {
+        this.value = matcher.group();
+        this.startIndex = matcher.start();
+        this.state = state;
     }
 
     @Override
     public String toString() {
-        return value;
-    }
-
-    public boolean isOperator() {
-        return TokenType.OPERATOR.equals(tokenType);
+        return String.format("{%s, value: %s, state: %s}", super.toString(), value, state.name());
     }
 }

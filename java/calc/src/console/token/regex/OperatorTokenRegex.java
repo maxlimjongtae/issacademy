@@ -1,22 +1,22 @@
 package console.token.regex;
 
-import console.operator.Operators;
-import console.token.TokenType;
+import console.operator.Operator;
+import console.token.state.TokenState;
 
 public class OperatorTokenRegex implements TokenRegex {
-    private Operators operators;
+    private final Operator operator;
 
-    public OperatorTokenRegex(Operators operators) {
-        this.operators = operators;
+    public OperatorTokenRegex(Operator operator) {
+        this.operator = operator;
     }
 
     @Override
     public String getRegex() {
-        return operators.getRegex();
+        return operator.getOperators();
     }
 
     @Override
-    public TokenType getTokenType() {
-        return TokenType.OPERATOR;
+    public TokenState getState() {
+        return TokenState.OPERATOR;
     }
 }

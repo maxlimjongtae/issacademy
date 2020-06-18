@@ -1,23 +1,23 @@
 package console.operator;
 
-public class StringOperators implements Operators {
+public class SignOperator implements Operator{
     @Override
     public String getPlus() {
-        return "add";
+        return "\\+";
     }
 
     @Override
     public String getMinus() {
-        return "minus";
+        return "\\-";
     }
 
     @Override
     public String getMultiply() {
-        return "multiply";
+        return "\\*";
     }
 
     @Override
-    public String getDivision() {
-        return "division";
+    public String getDivide() {
+        return "\\/";
     }
 }

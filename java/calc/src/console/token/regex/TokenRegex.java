@@ -1,8 +1,8 @@
 package console.token.regex;
 
-import console.token.TokenType;
+import console.token.state.TokenState;
 
 public interface TokenRegex {
     String getRegex();
-    TokenType getTokenType();
+    TokenState getState();
 }

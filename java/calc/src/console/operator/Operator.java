@@ -1,32 +1,22 @@
 package console.operator;
 
-import java.util.function.BiFunction;
+import java.util.StringJoiner;
 
-public enum Operator {
-    PLUS((a, b) -> a + b, 1),
-    MINUS((a, b) -> a - b, 1),
-    MULTIPLY((a, b) -> a * b, 3),
-    DIVISION((a, b) -> a / b, 3);
+public interface Operator {
+    String getPlus();
 
-    private final BiFunction<Long, Long, Long> expression;
-    private final int priority;
+    String getMinus();
 
-    Operator(BiFunction<Long, Long, Long> expression, int priority) {
-        this.expression = expression;
-        this.priority = priority;
-    }
+    String getMultiply();
 
-    public static Operator of(String name) {
-        for (Operator calculate : Operator.values()) {
-            if (calculate.name().equals(name)) {
-                return calculate;
-            }
-        }
+    String getDivide();
 
-        throw new IllegalArgumentException();
-    }
-
-    public Long calculate(Long a, Long b) {
-        return expression.apply(a, b);
+    default String getOperators() {
+        StringJoiner joiner = new StringJoiner("|");
+        joiner.add(getPlus());
+        joiner.add(getMinus());
+        joiner.add(getMultiply());
+        joiner.add(getDivide());
+        return joiner.toString();
     }
 }

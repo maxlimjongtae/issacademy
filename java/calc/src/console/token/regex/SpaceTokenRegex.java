@@ -1,15 +1,17 @@
 package console.token.regex;
 
+import console.annotation.Todo;
 import console.token.state.TokenState;
 
-public class OperandTokenRegex implements TokenRegex {
+@Todo
+public class SpaceTokenRegex implements TokenRegex {
     @Override
     public String getRegex() {
-        return "[\\+\\|\\-]?\\d+\\.*\\d*";
+        return "\\s*";
     }
 
     @Override
     public TokenState getState() {
-        return TokenState.OPERAND;
+        return null;
     }
 }
