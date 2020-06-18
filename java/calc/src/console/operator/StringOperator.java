@@ -1,6 +1,6 @@
 package console.operator;
 
-public class StringOperator implements Operator{
+public class StringOperator extends Operator {
     @Override
     public String getPlus() {
         return "plus";

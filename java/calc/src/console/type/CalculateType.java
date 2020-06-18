@@ -2,7 +2,7 @@ package console.type;
 
 import java.util.function.BiFunction;
 
-public enum OperatorType implements Calculable, Prioritizable {
+public enum CalculateType implements Calculable, Prioritizable {
     PLUS((a, b) -> a + b, PriorityType.PLUS_MINUS),
     MINUS((a, b) -> a - b, PriorityType.PLUS_MINUS),
     MULTIPLY((a, b) -> a * b, PriorityType.MULTIPLY_DIVIDE),
@@ -11,7 +11,7 @@ public enum OperatorType implements Calculable, Prioritizable {
     private final BiFunction<Long, Long, Long> expression;
     private final PriorityType priorityType;
 
-    OperatorType(BiFunction<Long, Long, Long> expression, PriorityType priorityType) {
+    CalculateType(BiFunction<Long, Long, Long> expression, PriorityType priorityType) {
         this.expression = expression;
         this.priorityType = priorityType;
     }

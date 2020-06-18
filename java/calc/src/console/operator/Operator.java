@@ -1,17 +1,34 @@
 package console.operator;
 
+import console.type.CalculateType;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringJoiner;
 
-public interface Operator {
-    String getPlus();
+public abstract class Operator {
+    private Map<String, CalculateType> calculatorMap = new HashMap<>();
 
-    String getMinus();
+    public Operator() {
+        calculatorMap.put(getPlus(), CalculateType.PLUS);
+        calculatorMap.put(getMinus(), CalculateType.MINUS);
+        calculatorMap.put(getMultiply(), CalculateType.MULTIPLY);
+        calculatorMap.put(getDivide(), CalculateType.DIVIDE);
+    }
 
-    String getMultiply();
+    abstract String getPlus();
 
-    String getDivide();
+    abstract String getMinus();
 
-    default String getOperators() {
+    abstract String getMultiply();
+
+    abstract String getDivide();
+
+    public CalculateType getCalulateType (String operator){
+        return calculatorMap.get(operator);
+    }
+
+    public String getOperators() {
         StringJoiner joiner = new StringJoiner("|");
         joiner.add(getPlus());
         joiner.add(getMinus());

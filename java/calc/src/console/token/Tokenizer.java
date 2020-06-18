@@ -44,11 +44,11 @@ public class Tokenizer {
         }
     }
 
-    public List<Token> tokenize(String input) {
+    public List<Token> tokenize(final String input) {
         return findTokens(input, TokenFinder.create());
     }
 
-    private List<Token> findTokens(String input, TokenFinder tokenFinder) {
+    private List<Token> findTokens(final String input, TokenFinder tokenFinder) {
         List<Token> result = new ArrayList<>();
 
         do {
