@@ -1,9 +1,17 @@
 package console.chapter_02;
 
+import java.util.Arrays;
 import java.util.Stack;
 import java.util.StringJoiner;
 import java.util.function.BiFunction;
 
+/**
+ * Chapter 02. 사칙연산을 후위표기법으로 계산하기
+ * <p>
+ * condition:
+ * 양수만 입력 받고 이상한 수식이 들어오지 않음을 가정
+ * 0으로 나누는 경우는 없다
+ */
 public class Calculator {
     enum Priority {
         PLUS_MINUS, MULTIPLY_DIVIDE, BRACKET;
@@ -37,19 +45,15 @@ public class Calculator {
     }
 
     private static boolean isOperator(char character) {
-        Operator[] operators = Operator.values();
+        return Arrays.stream(Operator.values()).anyMatch(operator -> operator.identifier.equals(character));
+    }
 
-        for (int i = 0; i < operators.length; i++) {
-            if (operators[i].identifier.equals(character)) {
-                return true;
-            }
-        }
-
-        return false;
+    private static boolean isLeftHigherThanRight(Priority left, Priority right) {
+        return left.compareTo(right) > 0;
     }
 
     public static void main(String[] args) {
-        final String input = "11 + 26 * 3 + 88";
+        final String input = "1 * 2 * 4 + 8 * 4 / 2 + 4";
 
         final StringJoiner postfixBuilder = new StringJoiner(",");
         final StringBuilder operandBuilder = new StringBuilder();
@@ -70,12 +74,12 @@ public class Calculator {
                 if (operatorStack.empty()) {
                     operatorStack.push(operator);
                 } else {
-                    if (operator.priority.compareTo(operatorStack.peek().priority) > 0) {
-                        operatorStack.push(operator);
-                    } else {
-                        postfixBuilder.add(String.valueOf(operatorStack.pop().identifier));
-                        operatorStack.push(operator);
+                    for (int j = 0; j < operatorStack.size(); j++) {
+                        if (isLeftHigherThanRight(operatorStack.peek().priority, operator.priority)) {
+                            postfixBuilder.add(String.valueOf(operatorStack.pop().identifier));
+                        }
                     }
+                    operatorStack.push(operator);
                 }
             } else {
                 operandBuilder.append(character);

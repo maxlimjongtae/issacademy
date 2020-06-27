@@ -3,6 +3,12 @@ package console.chapter_01;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Chapter 01. 더하기/빼기의 결과를 출력하기
+ *
+ * condition:
+ * 양수만 입력 받고 이상한 수식이 들어오지 않음을 가정
+ */
 public class Calculator {
     public static void main(String[] args) {
         String input = "11 + 30 - 26 - 10";
