@@ -1,19 +1,23 @@
-package console.chapter_03;
+package console.chapter_04;
 
-import console.chapter_03.token.Token;
-import console.chapter_03.token.Tokenizer;
-import console.chapter_03.type.Operand;
-import console.chapter_03.type.Operator;
+import console.chapter_04.token.Token;
+import console.chapter_04.token.Tokenizer;
+import console.chapter_04.type.Operand;
+import console.chapter_04.type.Operation;
+import console.chapter_04.type.Operator;
 
 import java.util.List;
 import java.util.Stack;
 
 /**
- * Chapter 03. Split tokenizing, postfix
+ * Chapter 04. 괄호 추가하기
+ * <p>
+ * condition:
+ * 소괄호만
  */
 public class Calculator {
     public static void main(String[] args) {
-        final String input = "1 * 2 * 4 + 8 * 4 / 2 + 4";
+        final String input = "( 1 - 5 * 1 ) + ( ( 2 - 3 ) - 3 * 4 )";
 
         System.out.println(calculate(input));
     }
@@ -32,8 +36,8 @@ public class Calculator {
                 Integer right = operandStack.pop();
                 Integer left = operandStack.pop();
 
-                operandStack.push(operator.getExpression().apply(left, right));
-            } else if(token instanceof Operand) {
+                operandStack.push(Operation.getExpression(operator).apply(left, right));
+            } else if (token instanceof Operand) {
                 operandStack.push(((Operand) token).getValue());
             } else {
                 throw new RuntimeException("Invalid token");

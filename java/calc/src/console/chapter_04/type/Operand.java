@@ -1,6 +1,6 @@
-package console.chapter_03.type;
+package console.chapter_04.type;
 
-import console.chapter_03.token.Token;
+import console.chapter_04.token.Token;
 
 public class Operand implements Token {
     private final Integer value;

@@ -7,9 +7,8 @@ import java.util.function.BiFunction;
 
 /**
  * Chapter 02. 사칙연산을 후위표기법으로 계산하기
- * <p>
+ *
  * condition:
- * 양수만 입력 받고 이상한 수식이 들어오지 않음을 가정
  * 0으로 나누는 경우는 없다
  */
 public class Calculator {

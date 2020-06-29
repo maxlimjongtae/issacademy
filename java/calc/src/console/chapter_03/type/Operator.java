@@ -41,4 +41,9 @@ public enum Operator implements Token {
 
         throw new RuntimeException("Invalid identifier.");
     }
+
+    @Override
+    public String toString() {
+        return String.valueOf(identifier);
+    }
 }
