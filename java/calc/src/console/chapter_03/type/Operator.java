@@ -1,8 +1,10 @@
 package console.chapter_03.type;
 
+import console.chapter_03.token.Token;
+
 import java.util.function.BiFunction;
 
-public enum Operator {
+public enum Operator implements Token {
     PLUS('+', Priority.PLUS_MINUS, (a, b) -> a + b),
     MINUS('-', Priority.PLUS_MINUS, (a, b) -> a - b),
     MULTIPLY('*', Priority.MULTIPLY_DIVIDE, (a, b) -> a * b),

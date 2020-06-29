@@ -1,17 +1,16 @@
 package console.chapter_03.token;
 
+import console.chapter_03.type.Operand;
 import console.chapter_03.type.Operator;
-import console.chapter_03.type.Priority;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Stack;
-import java.util.StringJoiner;
+import java.util.List;
 
 public class Tokenizer {
-    public static String tokenize(String input) {
-        final StringJoiner postfixBuilder = new StringJoiner(",");
+    public static List<Token> tokenize(String input) {
+        final List<Token> infixTokenList = new ArrayList<>();
         final StringBuilder operandBuilder = new StringBuilder();
-        final Stack<Operator> operatorStack = new Stack<>();
 
         char[] chars = input.replaceAll(" ", "").toCharArray();
 
@@ -20,36 +19,18 @@ public class Tokenizer {
 
             // Todo: extract method
             if (isOperator(character)) {
-                postfixBuilder.add(operandBuilder.toString());
+                infixTokenList.add(new Operand(operandBuilder.toString()));
                 operandBuilder.setLength(0);
 
-                Operator operator = Operator.of(character);
-
-                if (operatorStack.empty()) {
-                    operatorStack.push(operator);
-                } else {
-                    for (int j = 0; j < operatorStack.size(); j++) {
-                        if (isLeftHigherThanRight(operatorStack.peek().getPriority(), operator.getPriority())) {
-                            postfixBuilder.add(String.valueOf(operatorStack.pop().getIdentifier()));
-                        }
-                    }
-                    operatorStack.push(operator);
-                }
+                infixTokenList.add(Operator.of(character));
             } else {
                 operandBuilder.append(character);
             }
         }
-        postfixBuilder.add(operandBuilder.toString());
 
-        while (!operatorStack.empty()) {
-            postfixBuilder.add(String.valueOf(operatorStack.pop().getIdentifier()));
-        }
+        infixTokenList.add(new Operand(operandBuilder.toString()));
 
-        return postfixBuilder.toString();
-    }
-
-    private static boolean isLeftHigherThanRight(Priority left, Priority right) {
-        return left.compareTo(right) > 0;
+        return infixTokenList;
     }
 
     private static boolean isOperator(char character) {
