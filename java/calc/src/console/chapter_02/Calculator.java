@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 
 /**
  * Chapter 02. 사칙연산을 후위표기법으로 계산하기
- *
+ * <p>
  * condition:
  * 0으로 나누는 경우는 없다
  */
@@ -73,10 +73,8 @@ public class Calculator {
                 if (operatorStack.empty()) {
                     operatorStack.push(operator);
                 } else {
-                    for (int j = 0; j < operatorStack.size(); j++) {
-                        if (isLeftHigherThanRight(operatorStack.peek().priority, operator.priority)) {
-                            postfixBuilder.add(String.valueOf(operatorStack.pop().identifier));
-                        }
+                    while (!operatorStack.empty() && isLeftHigherThanRight(operatorStack.peek().priority, operator.priority)) {
+                        postfixBuilder.add(String.valueOf(operatorStack.pop().identifier));
                     }
                     operatorStack.push(operator);
                 }

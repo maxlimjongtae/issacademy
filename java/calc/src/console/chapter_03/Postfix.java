@@ -25,10 +25,8 @@ public class Postfix {
                 if (operatorStack.empty()) {
                     operatorStack.push(operator);
                 } else {
-                    for (int j = 0; j < operatorStack.size(); j++) {
-                        if (isLeftHigherThanRight(operatorStack.peek().getPriority(), operator.getPriority())) {
-                            postfixTokenList.add(operatorStack.pop());
-                        }
+                    while (!operatorStack.empty() && isLeftHigherThanRight(operatorStack.peek().getPriority(), operator.getPriority())) {
+                        postfixTokenList.add(operatorStack.pop());
                     }
                     operatorStack.push(operator);
                 }
@@ -45,6 +43,4 @@ public class Postfix {
 
         return postfixTokenList;
     }
-
-
 }

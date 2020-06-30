@@ -17,7 +17,7 @@ import java.util.Stack;
  */
 public class Calculator {
     public static void main(String[] args) {
-        final String input = "( 1 - 5 * 1 ) + ( ( 2 - 3 ) - 3 * 4 )";
+        final String input = "1 + ( 1 - 5 * 1 ) + ( ( 2 - 3 ) - 3 * 4 ) + 2 * 4";
 
         System.out.println(calculate(input));
     }

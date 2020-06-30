@@ -32,7 +32,7 @@ public class Postfix {
                         operatorStack.pop();
                     } else {
                         if (!operatorStack.peek().isOpen()) {
-                            while (isLeftHigherThanRight(operatorStack.peek().getPriority(), operator.getPriority())) {
+                            while (!operatorStack.empty() && isLeftHigherThanRight(operatorStack.peek().getPriority(), operator.getPriority())) {
                                 postfixTokenList.add(operatorStack.pop());
                             }
                         }
@@ -52,6 +52,4 @@ public class Postfix {
 
         return postfixTokenList;
     }
-
-
 }
