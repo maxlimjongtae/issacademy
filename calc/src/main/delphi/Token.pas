@@ -4,7 +4,7 @@ interface
 
 type
   TToken = class abstract
-    protected
+  public
     function ToString(): string; virtual; abstract;
   end;
 

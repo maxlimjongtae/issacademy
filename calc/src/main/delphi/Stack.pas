@@ -8,19 +8,19 @@ uses
 
 type
   TStack<T: class> = class
-    private const
-      UNDERFLOW = -1;
-    var
-      FTop: Integer;
-      FList: TArray<T>;
-    public
-      procedure Push(Node: T);
-      function Pop(): T;
-      function Peek(): T;
-      function IsEmpty(): boolean;
+  private const
+    UNDERFLOW = -1;
+  private
+    FTop: Integer;
+    FList: TArray<T>;
+  public
+    constructor Create;
+    destructor Destroy; override;
 
-      constructor Create;
-      destructor Destroy; override;
+    procedure Push(const Node: T);
+    function Pop: T;
+    function Peek: T;
+    function IsEmpty: Boolean;
   end;
 
 implementation
@@ -29,7 +29,7 @@ implementation
 
 constructor TStack<T>.Create;
 begin
-  Ftop := UNDERFLOW;
+  FTop := UNDERFLOW;
   SetLength(FList, 128);
 end;
 
@@ -39,14 +39,14 @@ begin
   inherited;
 end;
 
-function TStack<T>.IsEmpty: boolean;
+function TStack<T>.IsEmpty: Boolean;
 begin
-  Result := FTop > UNDERFLOW;
+  Result := FTop <= UNDERFLOW;
 end;
 
 function TStack<T>.Peek: T;
 begin
-  if not(IsEmpty()) then
+  if IsEmpty then
   begin
     raise Exception.Create('Stack is empty');
   end
@@ -57,21 +57,14 @@ begin
 end;
 
 function TStack<T>.Pop: T;
-var
-  Node: T;
 begin
-  Node := self.Peek();
-
-  //FList[FTop];
+  Result := Peek;
   Dec(FTop);
-
-  Result := Node;
 end;
 
-procedure TStack<T>.Push(Node: T);
+procedure TStack<T>.Push(const Node: T);
 begin
   Inc(FTop);
-
   FList[FTop] := Node;
 end;
 
