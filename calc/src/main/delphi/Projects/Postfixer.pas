@@ -3,17 +3,12 @@ unit Postfixer;
 interface
 
 uses
-  System.SysUtils, System.Generics.Collections, Winapi.Windows,
+  System.SysUtils, System.Generics.Collections,
   Token, Stack, Calculator.Types;
 
   function postfix(const InfixTokenList: TObjectList<TToken>): TObjectList<TToken>;
 
 implementation
-
-  procedure Print(Msg: String);
-  begin
-    OutputDebugString(PChar(Msg));
-  end;
 
   function IsLeftHigherThanRight(L, R: TOperatorToken): Boolean;
   begin
@@ -45,7 +40,7 @@ implementation
           end
           else
           begin
-            if OperatorToken.isCloseBracket then
+            if OperatorToken.IsCloseBracket then
             begin
               while not(OperatorTokenStack.Peek.IsOpenBracket) do
                 PostfixTokenList.Add(OperatorTokenStack.Pop);

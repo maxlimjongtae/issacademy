@@ -1,20 +1,17 @@
 program Calculator;
 
 uses
-  System.SysUtils, System.Generics.Collections, Winapi.Windows,
+  System.SysUtils,
+  System.Generics.Collections,
   Calculator.Types in 'Calculator.Types.pas',
   CalculatorForm in 'CalculatorForm.pas' {Form1},
   Postfixer in 'Postfixer.pas',
   Stack in 'Stack.pas',
   Token in 'Token.pas',
-  Tokenizer in 'Tokenizer.pas';
+  Tokenizer in 'Tokenizer.pas',
+  DebugPrinter in 'DebugPrinter.pas';
 
 {$R *.res}
-
-procedure Print(Msg: string);
-begin
-  OutputDebugString(PChar(Msg));
-end;
 
 function CalculatePostfix(const PostfixTokenList: TObjectList<TToken>): Integer;
 var
@@ -39,7 +36,7 @@ begin
         R := OperandStack.Pop;
         L := OperandStack.Pop;
 
-        OperandStack.Push(OperatorToken.Operation(L, R));
+        OperandStack.Push(TBinaryOperation.Operation(OperatorToken.Value, L, R));
       end
       else if Token is TOperandToken then
       begin
@@ -55,7 +52,7 @@ begin
     Result := OperandStack.Pop;
   finally
     OperandStack.Free;
-    PostfixTokenList.Free;
+    PostfixTokenList.FreeInstance;
   end;
 end;
 
@@ -67,7 +64,6 @@ begin
   try
     Print('Result: ' + IntToStr(CalculatePostfix(Postfix(InfixTokenList))));
   finally
-    InfixTokenList.Clear;
     InfixTokenList.Free;
   end;
 end;

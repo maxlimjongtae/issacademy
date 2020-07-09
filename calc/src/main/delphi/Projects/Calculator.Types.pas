@@ -8,28 +8,28 @@ uses
 
 type
   TOperatorPriority = (PLUS_MINUS, MULTIPLY_DIVIDE, BRACKET);
-  TOperation = reference to function(L, R: Integer): Integer;
+  TOperatorType = (PLUS, MINUS, MULTIPLY, DIVIDE, OPEN_BRACKET, CLOSE_BRACKET);
+
+  TBinaryOperation = class
+    public class function Operation(OperatorType: TOperatorType; L, R: Integer): Integer; static;
+  end;
 
   TOperatorToken = class(TToken)
   private
-    FValue: string;
-    FOperation: TOperation;
+    FValue: TOperatorType;
     FPriority: TOperatorPriority;
 
     function GetPriority: TOperatorPriority;
-    function GetOperation: TOperation;
-    function GetValue: string;
+    function GetValue: TOperatorType;
   public
     Constructor Create(const C: Char);
-    Destructor Destroy; override;
 
     function ToString: string; override;
     function IsOpenBracket: Boolean;
-    function isCloseBracket: Boolean;
+    function IsCloseBracket: Boolean;
 
     property Priority: TOperatorPriority read GetPriority write FPriority;
-    property Operation: TOperation read GetOperation write FOperation;
-    property Value: string read GetValue write FValue;
+    property Value: TOperatorType read GetValue write FValue;
   end;
 
   TOperandToken = class(TToken)
@@ -46,6 +46,14 @@ type
   end;
 
 implementation
+
+uses
+  TypInfo;
+
+function OperatorTypeToStr(Value: TOperatorType): String;
+begin
+  Result := GetEnumName(TypeInfo(TOperatorType), Integer(Value));
+end;
 
 { TOperand }
 
@@ -72,66 +80,39 @@ end;
 
 constructor TOperatorToken.Create(const C: Char);
 begin
-  FValue := C;
-
   case C of
     '+':
     begin
-      FOperation :=
-      function(L, R:Integer):Integer
-      begin
-        Result := L + R;
-      end;
-
+      FValue := PLUS;
       FPriority := PLUS_MINUS;
     end;
     '-':
     begin
-      FOperation :=
-      function(L, R:Integer):Integer
-      begin
-        Result := L - R;
-      end;
-
+      FValue := MINUS;
       FPriority := PLUS_MINUS;
     end;
     '*':
     begin
-      FOperation :=
-      function(L, R:Integer):Integer
-      begin
-        Result := L * R;
-      end;
-
+      FValue := MULTIPLY;
       FPriority := MULTIPLY_DIVIDE;
     end;
     '/':
     begin
-      FOperation :=
-      function(L, R:Integer):Integer
-      begin
-        Result := L div R;
-      end;
-
+      FValue := DIVIDE;
       FPriority := MULTIPLY_DIVIDE;
     end;
-    '(', ')':
+    '(':
     begin
+      FValue := OPEN_BRACKET;
       FPriority := BRACKET;
     end;
+    ')':
+    begin
+      FValue := CLOSE_BRACKET;
+      FPriority := BRACKET;
+    end
     else raise Exception.Create('Invalid operator.');
   end;
-end;
-
-destructor TOperatorToken.Destroy;
-begin
-  FOperation := nil;
-  inherited;
-end;
-
-function TOperatorToken.GetOperation: TOperation;
-begin
-  Result := FOperation;
 end;
 
 function TOperatorToken.GetPriority: TOperatorPriority;
@@ -139,14 +120,19 @@ begin
   Result := FPriority;
 end;
 
-function TOperatorToken.GetValue: string;
+function TOperatorToken.GetValue: TOperatorType;
 begin
   Result := FValue;
 end;
 
-function TOperatorToken.isCloseBracket: Boolean;
+function TOperatorToken.ToString: string;
 begin
-  if FValue.Equals(')') then
+  Result := OperatorTypeToStr(FValue);
+end;
+
+function TOperatorToken.IsCloseBracket: Boolean;
+begin
+  if FValue = CLOSE_BRACKET then
     Result := True
   else
     Result := False;
@@ -154,15 +140,27 @@ end;
 
 function TOperatorToken.IsOpenBracket: Boolean;
 begin
-  if FValue.Equals('(') then
+  if FValue = OPEN_BRACKET then
     Result := True
   else
     Result := False;
 end;
 
-function TOperatorToken.ToString: string;
+{ TOperation }
+
+class function TBinaryOperation.Operation(OperatorType: TOperatorType; L, R: Integer): Integer;
 begin
-  Result := FValue;
+  case OperatorType of
+    PLUS:
+      Result := L + R;
+    MINUS:
+      Result := L - R;
+    MULTIPLY:
+      Result := L * R;
+    DIVIDE:
+      Result := L div R;
+    else raise Exception.Create('Invalid operator type.');
+  end;
 end;
 
 end.
