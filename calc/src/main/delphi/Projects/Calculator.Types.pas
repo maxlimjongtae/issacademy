@@ -17,7 +17,7 @@ type
     FOperationPriority: TOperatorPriority;
   public
     Constructor Create(const C: Char);
-    function ToString(): string; override;
+    function ToString: string; override;
   end;
 
   TOperandToken = class(TToken)
@@ -25,7 +25,7 @@ type
     FValue: Integer;
   public
     Constructor Create(const S: string);
-    function ToString(): string; override;
+    function ToString: string; override;
   end;
 
 implementation
@@ -50,6 +50,8 @@ end;
 
 constructor TOperatorToken.Create(const C: Char);
 begin
+  FValue := C;
+
   case C of
     '+':
     begin
@@ -93,10 +95,7 @@ begin
       end
     else raise Exception.Create('Invalid Operator');
   end;
-
-  FValue := C;
 end;
-
 
 function TOperatorToken.ToString: string;
 begin

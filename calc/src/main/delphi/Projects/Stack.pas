@@ -10,6 +10,7 @@ type
   TStack<T: class> = class
   private const
     UNDERFLOW = -1;
+    LIST_MAX_SIZE = 128;
   private
     FTop: Integer;
     FList: TArray<T>;
@@ -30,7 +31,7 @@ implementation
 constructor TStack<T>.Create;
 begin
   FTop := UNDERFLOW;
-  SetLength(FList, 128);
+  SetLength(FList, LIST_MAX_SIZE);
 end;
 
 destructor TStack<T>.Destroy;

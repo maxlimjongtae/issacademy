@@ -21,8 +21,8 @@ end;
 function Tokeinize(Input: string): TObjectList<TToken>;
 var 
   C: Char;
-  Operand: string;
   InfixTokenList: TObjectList<TToken>;
+  Operand: string;
 begin
   Input := StringReplace(Input, ' ', string.Empty, [rfReplaceAll]);
   InfixTokenList := TObjectList<TToken>.Create;
