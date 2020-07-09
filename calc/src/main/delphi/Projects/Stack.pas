@@ -49,7 +49,7 @@ function TStack<T>.Peek: T;
 begin
   if IsEmpty then
   begin
-    raise Exception.Create('Stack is empty');
+    raise Exception.Create('Stack is empty.');
   end
   else
   begin

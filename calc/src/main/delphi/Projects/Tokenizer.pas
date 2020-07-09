@@ -6,19 +6,19 @@ uses
   SysUtils, System.Generics.Collections,
   Token, Calculator.Types;
 
-function Tokeinize(Input: string): TObjectList<TToken>;
+function Tokenize(Input: string): TObjectList<TToken>;
 
 implementation
 
 function IsOperator(C: Char): Boolean;
 begin
   case C of
-    '+', '-', '*', '/': Result := True;
+    '+', '-', '*', '/', '(', ')': Result := True;
     else Result := False;
   end;
 end;
 
-function Tokeinize(Input: string): TObjectList<TToken>;
+function Tokenize(Input: string): TObjectList<TToken>;
 var 
   C: Char;
   InfixTokenList: TObjectList<TToken>;
