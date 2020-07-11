@@ -6,26 +6,25 @@ uses
   SysUtils, System.Generics.Collections,
   Token, Calculator.Types;
 
-function Tokenize(Input: string): TObjectList<TToken>;
+function Tokenize(Input: string): TList<TToken>;
 
 implementation
 
 function IsOperator(C: Char): Boolean;
 begin
   case C of
-    '+', '-', '*', '/', '(', ')': Result := True;
+    '+', '-', '*', '/', '(', ')': Result := True; // shr shl
     else Result := False;
   end;
 end;
 
-function Tokenize(Input: string): TObjectList<TToken>;
+function Tokenize(Input: string): TList<TToken>;
 var 
   C: Char;
-  InfixTokenList: TObjectList<TToken>;
   Operand: string;
 begin
-  Input := StringReplace(Input, ' ', string.Empty, [rfReplaceAll]);
-  InfixTokenList := TObjectList<TToken>.Create;
+  Input := Input.Replace(' ', ''); //  StringReplace(Input, ' ', string.Empty, [rfReplaceAll]);
+  Result := TObjectList<TToken>.Create;
 
   for C in Input do
   begin
@@ -33,11 +32,11 @@ begin
     begin
       if Operand.Length > 0 then
       begin
-        InfixTokenList.Add(TOperandToken.Create(Operand));
+        Result.Add(TOperandToken.Create(Operand));
         Operand := string.Empty;
       end;
         
-      InfixTokenList.Add(TOperatorToken.Create(C));
+      Result.Add(TOperatorToken.Create(C));
     end
     else
     begin
@@ -45,9 +44,7 @@ begin
     end;
   end;
 
-  InfixTokenList.Add(TOperandToken.Create(Operand));
-
-  Result := InfixTokenList;
+  Result.Add(TOperandToken.Create(Operand));
 end;
 
 end.

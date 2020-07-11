@@ -3,7 +3,7 @@
         <ProjectGuid>{ACF439CE-6BF2-40C8-9525-FC686BFD9FB2}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Calculator.dproj">
+        <Projects Include="ConsoleCalculator.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -14,23 +14,23 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="Calculator">
-        <MSBuild Projects="Calculator.dproj"/>
+    <Target Name="ConsoleCalculator">
+        <MSBuild Projects="ConsoleCalculator.dproj"/>
     </Target>
-    <Target Name="Calculator:Clean">
-        <MSBuild Projects="Calculator.dproj" Targets="Clean"/>
+    <Target Name="ConsoleCalculator:Clean">
+        <MSBuild Projects="ConsoleCalculator.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="Calculator:Make">
-        <MSBuild Projects="Calculator.dproj" Targets="Make"/>
+    <Target Name="ConsoleCalculator:Make">
+        <MSBuild Projects="ConsoleCalculator.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="Calculator"/>
+        <CallTarget Targets="ConsoleCalculator"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Calculator:Clean"/>
+        <CallTarget Targets="ConsoleCalculator:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Calculator:Make"/>
+        <CallTarget Targets="ConsoleCalculator:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

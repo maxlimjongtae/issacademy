@@ -3,7 +3,7 @@ unit Calculator.Types;
 interface
 
 uses
-  SysUtils,
+  SysUtils, System.Rtti, TypInfo,
   Token;
 
 type
@@ -47,23 +47,17 @@ type
 
 implementation
 
-uses
-  TypInfo;
-
 function OperatorTypeToStr(Value: TOperatorType): String;
 begin
-  Result := GetEnumName(TypeInfo(TOperatorType), Integer(Value));
+  Result := TRttiEnumerationType.GetName<TOperatorType>(Value);
 end;
 
 { TOperand }
 
 constructor TOperandToken.Create(const S: string);
 begin
-  try
-    FValue := Integer.Parse(S);
-  except
+  if not TryStrToInt(S, FValue) then
     raise Exception.Create('Cannot parse string to integer');
-  end;
 end;
 
 function TOperandToken.GetValue: Integer;
@@ -132,18 +126,12 @@ end;
 
 function TOperatorToken.IsCloseBracket: Boolean;
 begin
-  if FValue = CLOSE_BRACKET then
-    Result := True
-  else
-    Result := False;
+  Result := FValue = CLOSE_BRACKET;
 end;
 
 function TOperatorToken.IsOpenBracket: Boolean;
 begin
-  if FValue = OPEN_BRACKET then
-    Result := True
-  else
-    Result := False;
+  Result := FValue = OPEN_BRACKET;
 end;
 
 { TOperation }
