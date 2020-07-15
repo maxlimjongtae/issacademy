@@ -21,7 +21,5 @@ object CalculatorView: TCalculatorView
     Height = 350
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = -8
-    ExplicitTop = 8
   end
 end

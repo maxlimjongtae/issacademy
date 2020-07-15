@@ -7,7 +7,7 @@ function Calculate(const Input: string): Integer;
 implementation
 
 uses
-  System.SysUtils, System.Generics.Collections,
+  System.SysUtils, System.Generics.Collections, DebugPrinter,
   Token, Tokenizer, Stack, Calculator.Types, Postfixer;
 
 function CalculatePostfix(const PostfixTokenList: TList<TToken>): Integer;
@@ -54,14 +54,24 @@ function Calculate(const Input: string): Integer;
 var
   InfixTokenList: TList<TToken>;
   PostfixTokenList: TList<TToken>;
+  Tokenizer: TTokenizer;
+  i: Integer;
 begin
-  InfixTokenList := Tokenize(INPUT);
+  Tokenizer := TTokenizer.Create;
+  InfixTokenList := Tokenizer.Tokenize(INPUT.Replace(' ', ''));
   PostfixTokenList := Postfix(InfixTokenList);
+
+  for i := 0 to PostfixTokenList.Count -1 do
+  begin
+    Print(PostfixTokenList[i].ToString);
+  end;
+
   try
     Result := CalculatePostfix(PostfixTokenList);
   finally
     PostfixTokenList.Free;
     InfixTokenList.Free;
+    Tokenizer.Free;
   end;
 end;
 

@@ -30,6 +30,8 @@ var
   Expression: string;
   Expected, Returned: Integer;
   Success, Failed: Integer;
+  Pointer: PChar;
+  Input: string;
 begin
   TestCaseMap := TDictionary<string, Integer>.Create;
 

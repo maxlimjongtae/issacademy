@@ -109,6 +109,16 @@
         <DCCReference Include="Tokenizer.pas"/>
         <DCCReference Include="Calculator.pas"/>
         <DCCReference Include="DebugPrinter.pas"/>
+        <DCCReference Include="state\State.pas"/>
+        <DCCReference Include="state\OperandState.pas"/>
+        <DCCReference Include="state\OperatorState.pas"/>
+        <DCCReference Include="state\OpenBracketState.pas"/>
+        <DCCReference Include="state\CloseBracketState.pas"/>
+        <DCCReference Include="state\FinalState.pas"/>
+        <DCCReference Include="state\InitState.pas"/>
+        <DCCReference Include="state\SpaceState.pas"/>
+        <DCCReference Include="state\ConditionState.pas"/>
+        <DCCReference Include="Tokenizer.Material.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

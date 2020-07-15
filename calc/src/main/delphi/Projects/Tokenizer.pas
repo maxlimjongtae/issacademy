@@ -4,47 +4,60 @@ interface
 
 uses
   SysUtils, System.Generics.Collections,
-  Token, Calculator.Types;
+  Token, Tokenizer.Material, Calculator.Types,
+  State, InitState, FinalState, OperandState, OperatorState, OpenBracketState, CloseBracketState, ConditionState;
 
-function Tokenize(Input: string): TList<TToken>;
+type
+  TTokenizer = class
+  private const
+    DEFAULT_STATE_TYPE = INIT;
+  private var
+    FStateMap: TDictionary<TStateType, IState>;
+  public
+    constructor Create;
+    destructor Destroy; override;
 
+    function Tokenize(Input: string): TList<TToken>;
+  end;
 implementation
 
-function IsOperator(C: Char): Boolean;
+{ TTokenizer }
+
+constructor TTokenizer.Create;
 begin
-  case C of
-    '+', '-', '*', '/', '(', ')': Result := True; // shr shl
-    else Result := False;
-  end;
+  FStateMap := TDictionary<TStateType, IState>.Create;
+  FStateMap.Add(INIT, TInitState.Create);
+  FStateMap.Add(FINAL, TFinalState.Create);
+  FStateMap.Add(OPERAND, TOperandState.Create);
+  FStateMap.Add(OPERATOR, TOperatorState.Create);
+  FStateMap.Add(OPEN_BRACKET, TOpenBracketState.Create);
+  FStateMap.Add(CLOSE_BRACKET, TCloseBracketState.Create);
+  FStateMap.Add(CONDITION, TConditionState.Create);
 end;
 
-function Tokenize(Input: string): TList<TToken>;
-var 
-  C: Char;
-  Operand: string;
+destructor TTokenizer.Destroy;
 begin
-  Input := Input.Replace(' ', ''); //  StringReplace(Input, ' ', string.Empty, [rfReplaceAll]);
-  Result := TObjectList<TToken>.Create;
+  FStateMap.Free;
+  inherited;
+end;
 
-  for C in Input do
-  begin
-    if IsOperator(C) then
-    begin
-      if Operand.Length > 0 then
-      begin
-        Result.Add(TOperandToken.Create(Operand));
-        Operand := string.Empty;
-      end;
-        
-      Result.Add(TOperatorToken.Create(C));
-    end
-    else
-    begin
-      Operand := Operand + C;  
-    end;
+function TTokenizer.Tokenize(Input: string): TList<TToken>;
+var
+  CurrentState: IState;
+  TokenizerMaterial: TTokenizerMaterial;
+begin
+  CurrentState := FStateMap.Items[DEFAULT_STATE_TYPE];
+  TokenizerMaterial := TTokenizerMaterial.Create(Input);
+
+  try
+    repeat
+      CurrentState := FStateMap.Items[CurrentState.Handle(TokenizerMaterial)];
+    until CurrentState.GetType = FINAL;
+
+    Result := TokenizerMaterial.TokenList;
+  finally
+    TokenizerMaterial.Free;
   end;
-
-  Result.Add(TOperandToken.Create(Operand));
 end;
 
 end.
