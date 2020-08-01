@@ -26,6 +26,4 @@ implementation
 
 {$R *.dfm}
 
-uses Identifier;
-
 end.
