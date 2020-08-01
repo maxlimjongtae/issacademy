@@ -4,11 +4,11 @@ uses
   SysUtils,
   Vcl.Forms,
   Main.FormView in 'Main.FormView.pas' {MainForm},
-  ScriptException in 'ScriptException.pas',
   DebugPrinter in 'DebugPrinter.pas',
   Identifier in 'Identifier.pas',
   SyntaxValidator in 'SyntaxValidator.pas',
-  Tokenizer in 'Tokenizer.pas';
+  Tokenizer in 'Tokenizer.pas',
+  Token in 'Token.pas';
 
 {$R *.res}
 

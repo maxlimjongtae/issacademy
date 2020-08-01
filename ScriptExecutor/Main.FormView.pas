@@ -26,6 +26,6 @@ implementation
 
 {$R *.dfm}
 
-uses Identifier, ScriptException;
+uses Identifier;
 
 end.

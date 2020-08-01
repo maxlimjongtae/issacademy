@@ -8,6 +8,7 @@ type
     FValue: string;
   public
     constructor Create(Value: string);
+
     property V: string read FValue;
   end;
 

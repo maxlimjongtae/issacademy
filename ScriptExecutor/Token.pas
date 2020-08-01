@@ -10,7 +10,7 @@ type
   private
     FRow, FCol: Integer;
   public
-    constructor Create(Row, Col);
+    constructor Create(Row, Col: Integer);
 
     property R: Integer read FRow;
     property C: Integer read FCol;
@@ -20,6 +20,7 @@ type
   private
     FPosition: TPosition;
     FIdentifier: TIdentifier;
+
     function GetIdentifierValue: string;
   public
     constructor Create(Position: TPosition; Identifier: TIdentifier);
@@ -50,6 +51,13 @@ constructor TToken.Create(Position: TPosition; Identifier: TIdentifier);
 begin
   FPosition := Position;
   FIdentifier := Identifier;
+end;
+
+destructor TToken.Destroy;
+begin
+  FIdentifier.Free;
+  FPosition.Free;
+  inherited;
 end;
 
 end.
