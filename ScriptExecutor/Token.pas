@@ -7,8 +7,8 @@ uses
 
 type
   TTokenType = (Declaration, Variable, WhiteSpace, TypeDefinition, TypeValue,
-    Definition, Value, Concat, EndOfStatement, OpenBracket, CloseBracket,
-    StringQuote, StringType, IntegerType, FunctionType);
+    Definition, Value, Concat, StatementEnd, OpenBracket, CloseBracket,
+    StringQuote, StringType, IntegerType, FunctionType, Unknown);
 
   TIdentifier = class
   private
@@ -41,7 +41,7 @@ type
     function GetIdentifierValue: string;
     function GetTokenType: TTokenType;
   public
-    constructor Create(Position: TPosition; Identifier: TIdentifier);
+    constructor Create(Row, Col: Integer; Identifier: TIdentifier);
     destructor Destroy; override;
 
     function ToString: string; override;
@@ -83,7 +83,7 @@ end;
 
 function TToken.ToString: string;
 begin
-  Result := 'Value: ' + V + ', Type: ' + TRttiEnumerationType.GetName<TTokenType>(T) + '\n' +Position.ToString;
+  Result := 'Value: '''+ V + ''', Type: ' + TRttiEnumerationType.GetName<TTokenType>(T) + ', ' + Position.ToString;
 end;
 
 function TToken.GetTokenType: TTokenType;
@@ -91,15 +91,14 @@ begin
   Result := FIdentifier.T;
 end;
 
-constructor TToken.Create(Position: TPosition; Identifier: TIdentifier);
+constructor TToken.Create(Row, Col:Integer; Identifier: TIdentifier);
 begin
-  FPosition := Position;
+  FPosition := TPosition.Create(Row, Col);
   FIdentifier := Identifier;
 end;
 
 destructor TToken.Destroy;
 begin
-  FIdentifier.Free;
   FPosition.Free;
   inherited;
 end;

@@ -103,7 +103,6 @@
             <Form>MainForm</Form>
         </DCCReference>
         <DCCReference Include="DebugPrinter.pas"/>
-        <DCCReference Include="Identifier.pas"/>
         <DCCReference Include="SyntaxValidator.pas"/>
         <DCCReference Include="Tokenizer.pas"/>
         <DCCReference Include="Token.pas"/>
