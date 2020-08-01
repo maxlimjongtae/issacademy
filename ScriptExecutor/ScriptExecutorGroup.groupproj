@@ -1,0 +1,36 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1CA7738C-F1CA-44E6-AA3B-D9C5E20B9CC6}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="ScriptExecutor.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="ScriptExecutor">
+        <MSBuild Projects="ScriptExecutor.dproj"/>
+    </Target>
+    <Target Name="ScriptExecutor:Clean">
+        <MSBuild Projects="ScriptExecutor.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ScriptExecutor:Make">
+        <MSBuild Projects="ScriptExecutor.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="ScriptExecutor"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="ScriptExecutor:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="ScriptExecutor:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -19,6 +19,7 @@ type
 
     function Tokenize(Input: string): TList<TToken>;
   end;
+
 implementation
 
 { TTokenizer }

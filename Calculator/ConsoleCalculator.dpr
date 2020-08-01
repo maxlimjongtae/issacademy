@@ -30,7 +30,7 @@ begin
 
     Application.Initialize;
     Application.CreateForm(TCalculatorView, CalculatorView);
-  Application.Run;
+    Application.Run;
 
   except
     on E: Exception do
