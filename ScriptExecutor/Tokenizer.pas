@@ -4,7 +4,7 @@ interface
 
 uses
   System.Generics.Collections,
-  Line, TokenBuilder, TokenState;
+  Token, TokenBuilder, TokenState;
 
 type
   TTokenizer = class
@@ -29,6 +29,7 @@ begin
   FTokenStateMap.Add(TTokenStateType.Branch, TBranchTokenState.Create);
   FTokenStateMap.Add(TTokenStateType.Identifier, TIdentifierTokenState.Create);
   FTokenStateMap.Add(TTokenStateType.Concat, TConcatTokenState.Create);
+  FTOkenStateMap.Add(TTokenStateType.Literal, TLiteralTokenState.Create);
 end;
 
 destructor TTokenizer.Destroy;

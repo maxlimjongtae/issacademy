@@ -21,21 +21,32 @@ type
     property T: TTokenType read FTokenType;
   end;
 
-  TPosition = class
+  TLine = class
   private
-    FRow, FCol: Integer;
+    FLineNumber: Integer;
+    FInput: string;
+  public
+    constructor Create(LineNumber: Integer; Input: string);
+
+    property RowNumber: Integer read FLineNumber;
+    property Input: string read FInput;
+  end;
+
+  TLinePos = class
+  private
+    FLine, FPos: Integer;
   public
     constructor Create(Row, Col: Integer);
 
     function ToString: string; override;
 
-    property R: Integer read FRow;
-    property C: Integer read FCol;
+    property Line: Integer read FLine;
+    property Pos: Integer read FPos;
   end;
 
   TToken = class
   private
-    FPosition: TPosition;
+    FPosition: TLinePos;
     FValue: string;
   public
     constructor Create(Value: string; Row, Col: Integer);
@@ -43,7 +54,7 @@ type
 
     function ToString: string; override;
 
-    property Position: TPosition read FPosition;
+    property Position: TLinePos read FPosition;
     property V: string read FValue;
   end;
 
@@ -57,17 +68,25 @@ begin
   FTokenType := TokenType;
 end;
 
-{ TPosition }
+{ TLine }
 
-constructor TPosition.Create(Row, Col: Integer);
+constructor TLine.Create(LineNumber: Integer; Input: string);
 begin
-  FRow := Row;
-  FCol := Col;
+  FLineNumber := LineNumber;
+  FInput := Input;
 end;
 
-function TPosition.ToString: string;
+{ TLinePos }
+
+constructor TLinePos.Create(Row, Col: Integer);
 begin
-  Result := 'Line: '+ IntToStr(R) + ', Position: ' + IntToStr(C);
+  FLine := Row;
+  FPos := Col;
+end;
+
+function TLinePos.ToString: string;
+begin
+  Result := 'Line: '+ IntToStr(Line) + ', Pos: ' + IntToStr(Pos);
 end;
 
 { TToken }
@@ -80,7 +99,7 @@ end;
 constructor TToken.Create(Value: string; Row, Col:Integer);
 begin
   FValue := Value;
-  FPosition := TPosition.Create(Row, Col);
+  FPosition := TLinePos.Create(Row, Col);
 end;
 
 destructor TToken.Destroy;

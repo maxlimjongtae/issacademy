@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.TabNotBk,
   Vcl.StdCtrls,
-  DebugPrinter, Tokenizer, Line;
+  DebugPrinter, Tokenizer, Token;
 
 type
   TMainForm = class(TForm)
