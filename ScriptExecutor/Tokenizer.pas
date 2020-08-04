@@ -3,21 +3,18 @@ unit Tokenizer;
 interface
 
 uses
-  SysUtils, System.Generics.Collections,
-  DebugPrinter, Token;
+  System.Generics.Collections,
+  Line, TokenBuilder, TokenState;
 
 type
   TTokenizer = class
   private
-    FIdentifierMap: TDictionary<String, TIdentifier>;
-
-    function IsIdentifier(S: string): Boolean;
-    function IsNotEmpty(S: string): Boolean;
+    FTokenStateMap: TDictionary<TTokenStateType, ITokenState>;
   public
     constructor Create;
     destructor Destroy; override;
 
-    procedure Tokenize(Line: string);
+    procedure Tokenize(const Line: TLine);
   end;
 
 implementation
@@ -25,96 +22,38 @@ implementation
 { TTokenizer }
 
 constructor TTokenizer.Create;
-var
-  IdentifierList: TList<TIdentifier>;
-  I: Integer;
 begin
-  FIdentifierMap := TObjectDictionary<String, TIdentifier>.Create;
-  IdentifierList := TList<TIdentifier>.Create;
-
-  try
-    IdentifierList.Add(TIdentifier.Create('var', TTokenType.Declaration));
-    IdentifierList.Add(TIdentifier.Create(' ', TTokenType.WhiteSpace));
-    IdentifierList.Add(TIdentifier.Create(';', TTokenType.StatementEnd));
-    IdentifierList.Add(TIdentifier.Create('=', TTokenType.Definition));
-    IdentifierList.Add(TIdentifier.Create(':', TTokenType.TypeDefinition));
-    IdentifierList.Add(TIdentifier.Create('''', TTokenType.StringQuote));
-    IdentifierList.Add(TIdentifier.Create('Integer', TTokenType.IntegerType));
-    IdentifierList.Add(TIdentifier.Create('string', TTokenType.StringType));
-    IdentifierList.Add(TIdentifier.Create('Write', TTokenType.FunctionType));
-    IdentifierList.Add(TIdentifier.Create('WriteLn', TTokenType.FunctionType));
-    IdentifierList.Add(TIdentifier.Create('+', TTokenType.Concat));
-    IdentifierList.Add(TIdentifier.Create('(', TTokenType.OpenBracket));
-    IdentifierList.Add(TIdentifier.Create(')', TTokenType.CloseBracket));
-
-    for I := 0 to IdentifierList.Count - 1 do
-    begin
-      FIdentifierMap.Add(IdentifierList.Items[I].V, IdentifierList.Items[I]);
-    end;
-  finally
-    IdentifierList.Free;
-  end;
+  FTokenStateMap := TDictionary<TTokenStateType, ITokenState>.Create;
+  FTokenStateMap.Add(TTokenStateType.Init, TInitTokenState.Create);
+  FTokenStateMap.Add(TTokenStateType.Final, TFinalTokenState.Create);
+  FTokenStateMap.Add(TTokenStateType.Branch, TBranchTokenState.Create);
+  FTokenStateMap.Add(TTokenStateType.Identifier, TIdentifierTokenState.Create);
+  FTokenStateMap.Add(TTokenStateType.Concat, TConcatTokenState.Create);
 end;
 
 destructor TTokenizer.Destroy;
 begin
-  FIdentifierMap.Free;
+  FTokenStateMap.Free;
   inherited;
 end;
 
-function TTokenizer.IsIdentifier(S: string): Boolean;
-begin
-  Result := FIdentifierMap.ContainsKey(S);
-end;
-
-function TTokenizer.IsNotEmpty(S: string): Boolean;
-begin
-  Result := not string.Empty.Equals(S);
-end;
-
-procedure TTokenizer.Tokenize(Line: string);
+procedure TTokenizer.Tokenize(const Line: TLine);
 const
-  TEMP_ROW = 1;
+  INIT_STATE = TTokenStateType.Init;
 var
-  TokenList: TList<TToken>;
-  CharArr: TArray<Char>;
-  S: string;
-  C: Char;
-  I: Integer;
+  TokenBuilder: TTokenBuilder;
+  CurrentState: ITokenState;
 begin
-  TokenList := TObjectList<TToken>.Create;
+  TokenBuilder := TTokenBuilder.Create(Line);
+  CurrentState := FTokenStateMap.Items[INIT_STATE];
+
   try
-    CharArr := Line.ToCharArray;
-    S := string.Empty;
+    while CurrentState.GetType <> TTokenStateType.Final do
+      CurrentState := FTokenStateMap.Items[CurrentState.Handle(TokenBuilder)];
 
-    for I := 0 to Length(CharArr) - 1 do
-    begin
-      C := CharArr[I];
-
-      if IsIdentifier(C) then
-      begin
-        if IsNotEmpty(S) then
-        begin
-          if IsIdentifier(S) then
-            TokenList.Add(TToken.Create(TEMP_ROW, I - S.Length, FIdentifierMap.Items[S]))
-          else
-            TokenList.Add(TToken.Create(TEMP_ROW, I - S.Length, TIdentifier.Create(S, TTokenType.Unknown)));
-
-          S := string.Empty;
-        end;
-        TokenList.Add(TToken.Create(TEMP_ROW, I, FIdentifierMap.Items[C]))
-      end
-      else
-        S := S + C;
-    end;
-
-    for I := 0 to TokenList.Count - 1 do
-    begin
-      Print('================================================================');
-      Print(TokenList.Items[I].ToString);
-    end;
+    TokenBuilder.PrintTokenList;
   finally
-    TokenList.Free;
+    TokenBuilder.Free;
   end;
 end;
 

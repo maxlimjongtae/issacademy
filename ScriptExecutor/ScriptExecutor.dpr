@@ -6,8 +6,10 @@ uses
   Main.FormView in 'Main.FormView.pas' {MainForm},
   DebugPrinter in 'DebugPrinter.pas',
   SyntaxValidator in 'SyntaxValidator.pas',
+  Token in 'Token.pas',
   Tokenizer in 'Tokenizer.pas',
-  Token in 'Token.pas';
+  TokenBuilder in 'TokenBuilder.pas',
+  TokenState in 'TokenState.pas';
 
 {$R *.res}
 
@@ -15,19 +17,12 @@ var
   Tokenizer: TTokenizer;
 begin
   try
-    ReportMemoryLeaksOnShutdown := True;
+    ReportMemoryLeaksOnShutdown := TRUE;
 
-//    Application.Initialize;
-//    Application.MainFormOnTaskbar := True;
-//    Application.CreateForm(TMainForm, MainForm);
-//    Application.Run;
-
-    Tokenizer := TTokenizer.Create;
-    try
-      Tokenizer.Tokenize('var b: Integer = 10;');
-    finally
-      Tokenizer.Free;
-    end;
+    Application.Initialize;
+    Application.MainFormOnTaskbar := True;
+    Application.CreateForm(TMainForm, MainForm);
+    Application.Run;
 
   except
     on E: Exception do

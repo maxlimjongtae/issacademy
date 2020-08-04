@@ -24,7 +24,11 @@ object MainForm: TMainForm
     Font.Name = 'Tahoma'
     Font.Style = []
     Lines.Strings = (
-      'Memo')
+      'var a: Integer;'
+      'var b: Integer = 10;'
+      'var c: string = '#39'asdfasdf'#39';'
+      'var d: string;'
+      'var e: Integer;')
     ParentFont = False
     TabOrder = 0
   end
@@ -52,6 +56,7 @@ object MainForm: TMainForm
     Height = 25
     Caption = 'Execute'
     TabOrder = 2
+    OnClick = ExecuteButtonClick
   end
   object CancelButton: TButton
     Left = 150

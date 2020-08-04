@@ -8,7 +8,7 @@ uses
 type
   TTokenType = (Declaration, Variable, WhiteSpace, TypeDefinition, TypeValue,
     Definition, Value, Concat, StatementEnd, OpenBracket, CloseBracket,
-    StringQuote, StringType, IntegerType, FunctionType, Unknown);
+    StringQuote, StringLiteral, StringType, IntegerType, FunctionType, Unknown);
 
   TIdentifier = class
   private
@@ -36,19 +36,15 @@ type
   TToken = class
   private
     FPosition: TPosition;
-    FIdentifier: TIdentifier;
-
-    function GetIdentifierValue: string;
-    function GetTokenType: TTokenType;
+    FValue: string;
   public
-    constructor Create(Row, Col: Integer; Identifier: TIdentifier);
+    constructor Create(Value: string; Row, Col: Integer);
     destructor Destroy; override;
 
     function ToString: string; override;
 
     property Position: TPosition read FPosition;
-    property V: string read GetIdentifierValue;
-    property T: TTokenType read GetTokenType;
+    property V: string read FValue;
   end;
 
 implementation
@@ -76,25 +72,15 @@ end;
 
 { TToken }
 
-function TToken.GetIdentifierValue: string;
-begin
-  Result := FIdentifier.V;
-end;
-
 function TToken.ToString: string;
 begin
-  Result := 'Value: '''+ V + ''', Type: ' + TRttiEnumerationType.GetName<TTokenType>(T) + ', ' + Position.ToString;
+  Result := 'Value: '''+ V + ''', ' + Position.ToString;
 end;
 
-function TToken.GetTokenType: TTokenType;
+constructor TToken.Create(Value: string; Row, Col:Integer);
 begin
-  Result := FIdentifier.T;
-end;
-
-constructor TToken.Create(Row, Col:Integer; Identifier: TIdentifier);
-begin
+  FValue := Value;
   FPosition := TPosition.Create(Row, Col);
-  FIdentifier := Identifier;
 end;
 
 destructor TToken.Destroy;
